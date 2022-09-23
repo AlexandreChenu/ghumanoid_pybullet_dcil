@@ -367,7 +367,7 @@ class GHumanoidGoal(GHumanoid, GoalEnv, utils.EzPickle, ABC):
 		self.num_envs = 1# self.set_success_function(default_success_function)
 
 		self.max_episode_steps = 100
-		self.frame_skip = 2
+		self.frame_skip = 1
 
 	def get_obs_dim(self):
 		return self.get_state()[0].shape[0]
@@ -388,13 +388,12 @@ class GHumanoidGoal(GHumanoid, GoalEnv, utils.EzPickle, ABC):
 	@torch.no_grad()
 	def step(self, action):
 		self.steps += 1
-		cur_state = self.state.copy()
 
 		for i in range(self.frame_skip):
 			new_state, env_reward, done, info =  self.env.step(action)
 		# print("step : ", self.project_to_goal_space(new_state))
 		self.state = self.env._get_obs().copy()
-		reward = self.compute_reward(self.project_to_goal_space(new_state), self.goal, {})
+		reward = self.compute_reward(self.project_to_goal_space(self.state), self.goal, {})
 
 		truncation = (self.steps >= self.max_episode_steps)
 
