@@ -326,7 +326,7 @@ def default_compute_reward(
 		desired_goal: Union[np.ndarray, torch.Tensor],
 		info: dict
 ):
-	distance_threshold = 0.1
+	distance_threshold = 0.075
 	reward_type = "sparse"
 	d = goal_distance(achieved_goal, desired_goal)
 	if reward_type == "sparse":
